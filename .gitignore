@@ -1,0 +1,4 @@
+# Transient user-data written by launch-ci-runner.sh — briefly contains a
+# short-lived runner registration token. Never commit it.
+.runner-userdata.*.sh
+*.bak
