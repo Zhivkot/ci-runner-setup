@@ -80,10 +80,18 @@ you'd rather not use SSM: open inbound 22 + EC2 Instance Connect, or bake
 
 ### Removing a per-repo runner
 
-In its dir on the box (`/home/ec2-user/runners/<owner>-<repo>/`):
-`sudo ./svc.sh stop && sudo ./svc.sh uninstall`, then
-`./config.sh remove --token <removal-token>` (mint with
-`gh api -X POST repos/<owner>/<repo>/actions/runners/remove-token --jq .token`).
+The inverse of `add-runner.sh`, same one-command shape:
+
+```bash
+bash remove-runner.sh Zhivkot/my-cdk-project
+```
+
+It mints a remove-token with your local `gh`, then over SSM stops +
+uninstalls that runner's service, deregisters it from GitHub, and deletes its
+directory — other runners on the box are untouched. Idempotent, and it
+deregisters via the API as a fallback if `config.sh remove` leaves the runner
+lingering. (Does **not** remove the `gha-runner-ssm` role or any IAM you
+attached — that's deliberate, it's shared.)
 
 ## Notes
 
